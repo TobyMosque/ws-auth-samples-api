@@ -623,6 +623,19 @@ export interface LoginAuthDto {
 /**
  * 
  * @export
+ * @interface LoginAuthResponseDto
+ */
+export interface LoginAuthResponseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginAuthResponseDto
+     */
+    'accessToken': string;
+}
+/**
+ * 
+ * @export
  * @interface PayloadAuthEntity
  */
 export interface PayloadAuthEntity {
@@ -1481,7 +1494,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async login(loginAuthDto: LoginAuthDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async login(loginAuthDto: LoginAuthDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginAuthResponseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.login(loginAuthDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1510,7 +1523,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        login(loginAuthDto: LoginAuthDto, options?: any): AxiosPromise<void> {
+        login(loginAuthDto: LoginAuthDto, options?: any): AxiosPromise<LoginAuthResponseDto> {
             return localVarFp.login(loginAuthDto, options).then((request) => request(axios, basePath));
         },
         /**
