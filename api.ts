@@ -1478,6 +1478,39 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        refresh: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/auth/refresh`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication access-token required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1507,6 +1540,15 @@ export const AuthApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.logout(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async refresh(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.refresh(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -1533,6 +1575,14 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          */
         logout(options?: any): AxiosPromise<void> {
             return localVarFp.logout(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        refresh(options?: any): AxiosPromise<string> {
+            return localVarFp.refresh(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1564,6 +1614,16 @@ export class AuthApi extends BaseAPI {
     public logout(options?: AxiosRequestConfig) {
         return AuthApiFp(this.configuration).logout(options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public refresh(options?: AxiosRequestConfig) {
+        return AuthApiFp(this.configuration).refresh(options).then((request) => request(this.axios, this.basePath));
+    }
 }
 
 
@@ -1576,11 +1636,10 @@ export const CompanyApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete: async (id: string, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        _delete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('_delete', 'id', id)
             const localVarPath = `/api/company/{id}`
@@ -1599,10 +1658,6 @@ export const CompanyApiAxiosParamCreator = function (configuration?: Configurati
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -1778,11 +1833,10 @@ export const CompanyApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @param {string} id 
          * @param {UpdateCompanyDto} updateCompanyDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (id: string, updateCompanyDto: UpdateCompanyDto, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update: async (id: string, updateCompanyDto: UpdateCompanyDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('update', 'id', id)
             // verify required parameter 'updateCompanyDto' is not null or undefined
@@ -1803,10 +1857,6 @@ export const CompanyApiAxiosParamCreator = function (configuration?: Configurati
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -1835,12 +1885,11 @@ export const CompanyApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async _delete(id: string, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, rev, options);
+        async _delete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1886,12 +1935,11 @@ export const CompanyApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} id 
          * @param {UpdateCompanyDto} updateCompanyDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(id: string, updateCompanyDto: UpdateCompanyDto, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Company>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateCompanyDto, rev, options);
+        async update(id: string, updateCompanyDto: UpdateCompanyDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Company>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateCompanyDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1907,12 +1955,11 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete(id: string, rev?: any, options?: any): AxiosPromise<object> {
-            return localVarFp._delete(id, rev, options).then((request) => request(axios, basePath));
+        _delete(id: string, options?: any): AxiosPromise<object> {
+            return localVarFp._delete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1954,12 +2001,11 @@ export const CompanyApiFactory = function (configuration?: Configuration, basePa
          * 
          * @param {string} id 
          * @param {UpdateCompanyDto} updateCompanyDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(id: string, updateCompanyDto: UpdateCompanyDto, rev?: any, options?: any): AxiosPromise<Company> {
-            return localVarFp.update(id, updateCompanyDto, rev, options).then((request) => request(axios, basePath));
+        update(id: string, updateCompanyDto: UpdateCompanyDto, options?: any): AxiosPromise<Company> {
+            return localVarFp.update(id, updateCompanyDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1974,13 +2020,12 @@ export class CompanyApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CompanyApi
      */
-    public _delete(id: string, rev?: any, options?: AxiosRequestConfig) {
-        return CompanyApiFp(this.configuration)._delete(id, rev, options).then((request) => request(this.axios, this.basePath));
+    public _delete(id: string, options?: AxiosRequestConfig) {
+        return CompanyApiFp(this.configuration)._delete(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2029,13 +2074,12 @@ export class CompanyApi extends BaseAPI {
      * 
      * @param {string} id 
      * @param {UpdateCompanyDto} updateCompanyDto 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CompanyApi
      */
-    public update(id: string, updateCompanyDto: UpdateCompanyDto, rev?: any, options?: AxiosRequestConfig) {
-        return CompanyApiFp(this.configuration).update(id, updateCompanyDto, rev, options).then((request) => request(this.axios, this.basePath));
+    public update(id: string, updateCompanyDto: UpdateCompanyDto, options?: AxiosRequestConfig) {
+        return CompanyApiFp(this.configuration).update(id, updateCompanyDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2267,11 +2311,10 @@ export const JobApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete: async (id: string, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        _delete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('_delete', 'id', id)
             const localVarPath = `/api/job/{id}`
@@ -2290,10 +2333,6 @@ export const JobApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -2469,11 +2508,10 @@ export const JobApiAxiosParamCreator = function (configuration?: Configuration) 
          * 
          * @param {string} id 
          * @param {UpdateJobDto} updateJobDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (id: string, updateJobDto: UpdateJobDto, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update: async (id: string, updateJobDto: UpdateJobDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('update', 'id', id)
             // verify required parameter 'updateJobDto' is not null or undefined
@@ -2494,10 +2532,6 @@ export const JobApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -2526,12 +2560,11 @@ export const JobApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async _delete(id: string, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, rev, options);
+        async _delete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -2577,12 +2610,11 @@ export const JobApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} id 
          * @param {UpdateJobDto} updateJobDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(id: string, updateJobDto: UpdateJobDto, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Job>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateJobDto, rev, options);
+        async update(id: string, updateJobDto: UpdateJobDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Job>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateJobDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2598,12 +2630,11 @@ export const JobApiFactory = function (configuration?: Configuration, basePath?:
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete(id: string, rev?: any, options?: any): AxiosPromise<object> {
-            return localVarFp._delete(id, rev, options).then((request) => request(axios, basePath));
+        _delete(id: string, options?: any): AxiosPromise<object> {
+            return localVarFp._delete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2645,12 +2676,11 @@ export const JobApiFactory = function (configuration?: Configuration, basePath?:
          * 
          * @param {string} id 
          * @param {UpdateJobDto} updateJobDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(id: string, updateJobDto: UpdateJobDto, rev?: any, options?: any): AxiosPromise<Job> {
-            return localVarFp.update(id, updateJobDto, rev, options).then((request) => request(axios, basePath));
+        update(id: string, updateJobDto: UpdateJobDto, options?: any): AxiosPromise<Job> {
+            return localVarFp.update(id, updateJobDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2665,13 +2695,12 @@ export class JobApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof JobApi
      */
-    public _delete(id: string, rev?: any, options?: AxiosRequestConfig) {
-        return JobApiFp(this.configuration)._delete(id, rev, options).then((request) => request(this.axios, this.basePath));
+    public _delete(id: string, options?: AxiosRequestConfig) {
+        return JobApiFp(this.configuration)._delete(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2720,13 +2749,12 @@ export class JobApi extends BaseAPI {
      * 
      * @param {string} id 
      * @param {UpdateJobDto} updateJobDto 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof JobApi
      */
-    public update(id: string, updateJobDto: UpdateJobDto, rev?: any, options?: AxiosRequestConfig) {
-        return JobApiFp(this.configuration).update(id, updateJobDto, rev, options).then((request) => request(this.axios, this.basePath));
+    public update(id: string, updateJobDto: UpdateJobDto, options?: AxiosRequestConfig) {
+        return JobApiFp(this.configuration).update(id, updateJobDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2740,11 +2768,10 @@ export const PersonApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete: async (id: string, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        _delete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('_delete', 'id', id)
             const localVarPath = `/api/person/{id}`
@@ -2763,10 +2790,6 @@ export const PersonApiAxiosParamCreator = function (configuration?: Configuratio
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -2942,11 +2965,10 @@ export const PersonApiAxiosParamCreator = function (configuration?: Configuratio
          * 
          * @param {string} id 
          * @param {UpdatePersonDto} updatePersonDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (id: string, updatePersonDto: UpdatePersonDto, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update: async (id: string, updatePersonDto: UpdatePersonDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('update', 'id', id)
             // verify required parameter 'updatePersonDto' is not null or undefined
@@ -2967,10 +2989,6 @@ export const PersonApiAxiosParamCreator = function (configuration?: Configuratio
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -2999,12 +3017,11 @@ export const PersonApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async _delete(id: string, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, rev, options);
+        async _delete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3050,12 +3067,11 @@ export const PersonApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} id 
          * @param {UpdatePersonDto} updatePersonDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(id: string, updatePersonDto: UpdatePersonDto, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Person>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updatePersonDto, rev, options);
+        async update(id: string, updatePersonDto: UpdatePersonDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Person>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updatePersonDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3071,12 +3087,11 @@ export const PersonApiFactory = function (configuration?: Configuration, basePat
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete(id: string, rev?: any, options?: any): AxiosPromise<object> {
-            return localVarFp._delete(id, rev, options).then((request) => request(axios, basePath));
+        _delete(id: string, options?: any): AxiosPromise<object> {
+            return localVarFp._delete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3118,12 +3133,11 @@ export const PersonApiFactory = function (configuration?: Configuration, basePat
          * 
          * @param {string} id 
          * @param {UpdatePersonDto} updatePersonDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(id: string, updatePersonDto: UpdatePersonDto, rev?: any, options?: any): AxiosPromise<Person> {
-            return localVarFp.update(id, updatePersonDto, rev, options).then((request) => request(axios, basePath));
+        update(id: string, updatePersonDto: UpdatePersonDto, options?: any): AxiosPromise<Person> {
+            return localVarFp.update(id, updatePersonDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3138,13 +3152,12 @@ export class PersonApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PersonApi
      */
-    public _delete(id: string, rev?: any, options?: AxiosRequestConfig) {
-        return PersonApiFp(this.configuration)._delete(id, rev, options).then((request) => request(this.axios, this.basePath));
+    public _delete(id: string, options?: AxiosRequestConfig) {
+        return PersonApiFp(this.configuration)._delete(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3193,13 +3206,12 @@ export class PersonApi extends BaseAPI {
      * 
      * @param {string} id 
      * @param {UpdatePersonDto} updatePersonDto 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PersonApi
      */
-    public update(id: string, updatePersonDto: UpdatePersonDto, rev?: any, options?: AxiosRequestConfig) {
-        return PersonApiFp(this.configuration).update(id, updatePersonDto, rev, options).then((request) => request(this.axios, this.basePath));
+    public update(id: string, updatePersonDto: UpdatePersonDto, options?: AxiosRequestConfig) {
+        return PersonApiFp(this.configuration).update(id, updatePersonDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3213,11 +3225,10 @@ export const RoleApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete: async (id: string, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        _delete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('_delete', 'id', id)
             const localVarPath = `/api/role/{id}`
@@ -3236,10 +3247,6 @@ export const RoleApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -3415,11 +3422,10 @@ export const RoleApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @param {string} id 
          * @param {UpdateRoleDto} updateRoleDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (id: string, updateRoleDto: UpdateRoleDto, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update: async (id: string, updateRoleDto: UpdateRoleDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('update', 'id', id)
             // verify required parameter 'updateRoleDto' is not null or undefined
@@ -3440,10 +3446,6 @@ export const RoleApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -3472,12 +3474,11 @@ export const RoleApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async _delete(id: string, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, rev, options);
+        async _delete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3523,12 +3524,11 @@ export const RoleApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} id 
          * @param {UpdateRoleDto} updateRoleDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(id: string, updateRoleDto: UpdateRoleDto, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Role>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateRoleDto, rev, options);
+        async update(id: string, updateRoleDto: UpdateRoleDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Role>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateRoleDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3544,12 +3544,11 @@ export const RoleApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete(id: string, rev?: any, options?: any): AxiosPromise<object> {
-            return localVarFp._delete(id, rev, options).then((request) => request(axios, basePath));
+        _delete(id: string, options?: any): AxiosPromise<object> {
+            return localVarFp._delete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3591,12 +3590,11 @@ export const RoleApiFactory = function (configuration?: Configuration, basePath?
          * 
          * @param {string} id 
          * @param {UpdateRoleDto} updateRoleDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(id: string, updateRoleDto: UpdateRoleDto, rev?: any, options?: any): AxiosPromise<Role> {
-            return localVarFp.update(id, updateRoleDto, rev, options).then((request) => request(axios, basePath));
+        update(id: string, updateRoleDto: UpdateRoleDto, options?: any): AxiosPromise<Role> {
+            return localVarFp.update(id, updateRoleDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3611,13 +3609,12 @@ export class RoleApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoleApi
      */
-    public _delete(id: string, rev?: any, options?: AxiosRequestConfig) {
-        return RoleApiFp(this.configuration)._delete(id, rev, options).then((request) => request(this.axios, this.basePath));
+    public _delete(id: string, options?: AxiosRequestConfig) {
+        return RoleApiFp(this.configuration)._delete(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3666,13 +3663,12 @@ export class RoleApi extends BaseAPI {
      * 
      * @param {string} id 
      * @param {UpdateRoleDto} updateRoleDto 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoleApi
      */
-    public update(id: string, updateRoleDto: UpdateRoleDto, rev?: any, options?: AxiosRequestConfig) {
-        return RoleApiFp(this.configuration).update(id, updateRoleDto, rev, options).then((request) => request(this.axios, this.basePath));
+    public update(id: string, updateRoleDto: UpdateRoleDto, options?: AxiosRequestConfig) {
+        return RoleApiFp(this.configuration).update(id, updateRoleDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3686,11 +3682,10 @@ export const SessionApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete: async (id: string, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        _delete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('_delete', 'id', id)
             const localVarPath = `/api/session/{id}`
@@ -3709,10 +3704,6 @@ export const SessionApiAxiosParamCreator = function (configuration?: Configurati
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -3888,11 +3879,10 @@ export const SessionApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @param {string} id 
          * @param {UpdateSessionDto} updateSessionDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (id: string, updateSessionDto: UpdateSessionDto, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update: async (id: string, updateSessionDto: UpdateSessionDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('update', 'id', id)
             // verify required parameter 'updateSessionDto' is not null or undefined
@@ -3913,10 +3903,6 @@ export const SessionApiAxiosParamCreator = function (configuration?: Configurati
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -3945,12 +3931,11 @@ export const SessionApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async _delete(id: string, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, rev, options);
+        async _delete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3996,12 +3981,11 @@ export const SessionApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} id 
          * @param {UpdateSessionDto} updateSessionDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(id: string, updateSessionDto: UpdateSessionDto, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Session>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateSessionDto, rev, options);
+        async update(id: string, updateSessionDto: UpdateSessionDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Session>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateSessionDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4017,12 +4001,11 @@ export const SessionApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete(id: string, rev?: any, options?: any): AxiosPromise<object> {
-            return localVarFp._delete(id, rev, options).then((request) => request(axios, basePath));
+        _delete(id: string, options?: any): AxiosPromise<object> {
+            return localVarFp._delete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4064,12 +4047,11 @@ export const SessionApiFactory = function (configuration?: Configuration, basePa
          * 
          * @param {string} id 
          * @param {UpdateSessionDto} updateSessionDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(id: string, updateSessionDto: UpdateSessionDto, rev?: any, options?: any): AxiosPromise<Session> {
-            return localVarFp.update(id, updateSessionDto, rev, options).then((request) => request(axios, basePath));
+        update(id: string, updateSessionDto: UpdateSessionDto, options?: any): AxiosPromise<Session> {
+            return localVarFp.update(id, updateSessionDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4084,13 +4066,12 @@ export class SessionApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SessionApi
      */
-    public _delete(id: string, rev?: any, options?: AxiosRequestConfig) {
-        return SessionApiFp(this.configuration)._delete(id, rev, options).then((request) => request(this.axios, this.basePath));
+    public _delete(id: string, options?: AxiosRequestConfig) {
+        return SessionApiFp(this.configuration)._delete(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4139,13 +4120,12 @@ export class SessionApi extends BaseAPI {
      * 
      * @param {string} id 
      * @param {UpdateSessionDto} updateSessionDto 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SessionApi
      */
-    public update(id: string, updateSessionDto: UpdateSessionDto, rev?: any, options?: AxiosRequestConfig) {
-        return SessionApiFp(this.configuration).update(id, updateSessionDto, rev, options).then((request) => request(this.axios, this.basePath));
+    public update(id: string, updateSessionDto: UpdateSessionDto, options?: AxiosRequestConfig) {
+        return SessionApiFp(this.configuration).update(id, updateSessionDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4159,11 +4139,10 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete: async (id: string, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        _delete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('_delete', 'id', id)
             const localVarPath = `/api/user/{id}`
@@ -4182,10 +4161,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -4361,11 +4336,10 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @param {string} id 
          * @param {UpdateUserDto} updateUserDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (id: string, updateUserDto: UpdateUserDto, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update: async (id: string, updateUserDto: UpdateUserDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('update', 'id', id)
             // verify required parameter 'updateUserDto' is not null or undefined
@@ -4386,10 +4360,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -4418,12 +4388,11 @@ export const UserApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async _delete(id: string, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, rev, options);
+        async _delete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -4469,12 +4438,11 @@ export const UserApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} id 
          * @param {UpdateUserDto} updateUserDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(id: string, updateUserDto: UpdateUserDto, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateUserDto, rev, options);
+        async update(id: string, updateUserDto: UpdateUserDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateUserDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4490,12 +4458,11 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete(id: string, rev?: any, options?: any): AxiosPromise<object> {
-            return localVarFp._delete(id, rev, options).then((request) => request(axios, basePath));
+        _delete(id: string, options?: any): AxiosPromise<object> {
+            return localVarFp._delete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4537,12 +4504,11 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * 
          * @param {string} id 
          * @param {UpdateUserDto} updateUserDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(id: string, updateUserDto: UpdateUserDto, rev?: any, options?: any): AxiosPromise<User> {
-            return localVarFp.update(id, updateUserDto, rev, options).then((request) => request(axios, basePath));
+        update(id: string, updateUserDto: UpdateUserDto, options?: any): AxiosPromise<User> {
+            return localVarFp.update(id, updateUserDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4557,13 +4523,12 @@ export class UserApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public _delete(id: string, rev?: any, options?: AxiosRequestConfig) {
-        return UserApiFp(this.configuration)._delete(id, rev, options).then((request) => request(this.axios, this.basePath));
+    public _delete(id: string, options?: AxiosRequestConfig) {
+        return UserApiFp(this.configuration)._delete(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4612,13 +4577,12 @@ export class UserApi extends BaseAPI {
      * 
      * @param {string} id 
      * @param {UpdateUserDto} updateUserDto 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public update(id: string, updateUserDto: UpdateUserDto, rev?: any, options?: AxiosRequestConfig) {
-        return UserApiFp(this.configuration).update(id, updateUserDto, rev, options).then((request) => request(this.axios, this.basePath));
+    public update(id: string, updateUserDto: UpdateUserDto, options?: AxiosRequestConfig) {
+        return UserApiFp(this.configuration).update(id, updateUserDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4632,11 +4596,10 @@ export const UserRoleApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete: async (id: string, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        _delete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('_delete', 'id', id)
             const localVarPath = `/api/user-role/{id}`
@@ -4655,10 +4618,6 @@ export const UserRoleApiAxiosParamCreator = function (configuration?: Configurat
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -4834,11 +4793,10 @@ export const UserRoleApiAxiosParamCreator = function (configuration?: Configurat
          * 
          * @param {string} id 
          * @param {UpdateUserRoleDto} updateUserRoleDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (id: string, updateUserRoleDto: UpdateUserRoleDto, rev?: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update: async (id: string, updateUserRoleDto: UpdateUserRoleDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('update', 'id', id)
             // verify required parameter 'updateUserRoleDto' is not null or undefined
@@ -4859,10 +4817,6 @@ export const UserRoleApiAxiosParamCreator = function (configuration?: Configurat
             // authentication access-token required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (rev !== undefined) {
-                localVarQueryParameter['rev'] = rev;
-            }
 
 
     
@@ -4891,12 +4845,11 @@ export const UserRoleApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async _delete(id: string, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, rev, options);
+        async _delete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator._delete(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -4942,12 +4895,11 @@ export const UserRoleApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} id 
          * @param {UpdateUserRoleDto} updateUserRoleDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(id: string, updateUserRoleDto: UpdateUserRoleDto, rev?: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserRole>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateUserRoleDto, rev, options);
+        async update(id: string, updateUserRoleDto: UpdateUserRoleDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserRole>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateUserRoleDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -4963,12 +4915,11 @@ export const UserRoleApiFactory = function (configuration?: Configuration, baseP
         /**
          * 
          * @param {string} id 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        _delete(id: string, rev?: any, options?: any): AxiosPromise<object> {
-            return localVarFp._delete(id, rev, options).then((request) => request(axios, basePath));
+        _delete(id: string, options?: any): AxiosPromise<object> {
+            return localVarFp._delete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5010,12 +4961,11 @@ export const UserRoleApiFactory = function (configuration?: Configuration, baseP
          * 
          * @param {string} id 
          * @param {UpdateUserRoleDto} updateUserRoleDto 
-         * @param {any} [rev] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(id: string, updateUserRoleDto: UpdateUserRoleDto, rev?: any, options?: any): AxiosPromise<UserRole> {
-            return localVarFp.update(id, updateUserRoleDto, rev, options).then((request) => request(axios, basePath));
+        update(id: string, updateUserRoleDto: UpdateUserRoleDto, options?: any): AxiosPromise<UserRole> {
+            return localVarFp.update(id, updateUserRoleDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5030,13 +4980,12 @@ export class UserRoleApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserRoleApi
      */
-    public _delete(id: string, rev?: any, options?: AxiosRequestConfig) {
-        return UserRoleApiFp(this.configuration)._delete(id, rev, options).then((request) => request(this.axios, this.basePath));
+    public _delete(id: string, options?: AxiosRequestConfig) {
+        return UserRoleApiFp(this.configuration)._delete(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5085,13 +5034,12 @@ export class UserRoleApi extends BaseAPI {
      * 
      * @param {string} id 
      * @param {UpdateUserRoleDto} updateUserRoleDto 
-     * @param {any} [rev] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserRoleApi
      */
-    public update(id: string, updateUserRoleDto: UpdateUserRoleDto, rev?: any, options?: AxiosRequestConfig) {
-        return UserRoleApiFp(this.configuration).update(id, updateUserRoleDto, rev, options).then((request) => request(this.axios, this.basePath));
+    public update(id: string, updateUserRoleDto: UpdateUserRoleDto, options?: AxiosRequestConfig) {
+        return UserRoleApiFp(this.configuration).update(id, updateUserRoleDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
