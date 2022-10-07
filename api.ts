@@ -383,6 +383,12 @@ export interface CreateSessionDto {
     'sessionId'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof CreateSessionDto
+     */
+    'refresh'?: string;
+    /**
+     * 
      * @type {CreateSessionUserRelationInputDto}
      * @memberof CreateSessionDto
      */
@@ -783,19 +789,6 @@ export interface PersonQueryResponseDto {
 /**
  * 
  * @export
- * @interface RefreshAuthResponseDto
- */
-export interface RefreshAuthResponseDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof RefreshAuthResponseDto
-     */
-    'accessToken': string;
-}
-/**
- * 
- * @export
  * @interface Role
  */
 export interface Role {
@@ -873,6 +866,12 @@ export interface Session {
      * @memberof Session
      */
     'sessionId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Session
+     */
+    'refresh': string | null;
     /**
      * 
      * @type {string}
@@ -1100,6 +1099,12 @@ export interface UpdateRoleUsersRelationInputDto {
  * @interface UpdateSessionDto
  */
 export interface UpdateSessionDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateSessionDto
+     */
+    'refresh'?: string;
     /**
      * 
      * @type {UpdateSessionUserRelationInputDto}
@@ -1594,7 +1599,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async refresh(flow: 'server' | 'client', refreshToken?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RefreshAuthResponseDto>> {
+        async refresh(flow: 'server' | 'client', refreshToken?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginAuthResponseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.refresh(flow, refreshToken, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1634,7 +1639,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        refresh(flow: 'server' | 'client', refreshToken?: string, options?: any): AxiosPromise<RefreshAuthResponseDto> {
+        refresh(flow: 'server' | 'client', refreshToken?: string, options?: any): AxiosPromise<LoginAuthResponseDto> {
             return localVarFp.refresh(flow, refreshToken, options).then((request) => request(axios, basePath));
         },
     };
